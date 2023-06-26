@@ -1,6 +1,6 @@
 # MP3TagExtractor
  
- A command-line application to extract (recursively, if needed) IDv3 metadata from audio files
+ A .NET6 command-line application to extract (recursively, if needed) IDv3 metadata from audio files
  
  ## Usage
  
