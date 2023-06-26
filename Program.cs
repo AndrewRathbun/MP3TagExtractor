@@ -35,11 +35,15 @@ namespace MP3TagExtractor
 
             SearchOption searchOption = recurse ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
+            // Count folders and files
+            int dirCount = Directory.GetDirectories(dirPath, "*", searchOption).Length;
+            var files = System.IO.Directory.EnumerateFiles(dirPath, "*.mp3", searchOption).ToList();
+            int fileCount = files.Count;
+
+            Console.WriteLine($"Located {dirCount} folders and {fileCount} .mp3 files in the specified path.");
+
             var csvBuilder = new StringBuilder();
             csvBuilder.AppendLine("Artist,Year,Album,Disc,Title,Duration,Comment,Genre");
-
-            // Get .mp3 files from the directory
-            var files = System.IO.Directory.EnumerateFiles(dirPath, "*.mp3", searchOption);
 
             foreach (var file in files)
             {
@@ -60,10 +64,15 @@ namespace MP3TagExtractor
             string parentFolderName = new DirectoryInfo(dirPath).Name.Replace(" ", "");
             string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string outputFileName = $"{parentFolderName}_{timeStamp}.csv";
+            string outputPath = Path.Combine(dirPath, outputFileName);
 
             // Write output to csv file
-            System.IO.File.WriteAllText(Path.Combine(dirPath, outputFileName), csvBuilder.ToString());
-            Console.WriteLine("CSV file created successfully.");
+            System.IO.File.WriteAllText(outputPath, csvBuilder.ToString());
+
+            // Output file details
+            long fileSize = new FileInfo(outputPath).Length;
+            int rowCount = csvBuilder.ToString().Split(Environment.NewLine).Length - 1; // Subtract 1 for header
+            Console.WriteLine($"CSV file created successfully at {outputPath} with {rowCount} rows. File size: {fileSize} bytes.");
         }
     }
 }
