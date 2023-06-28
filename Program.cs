@@ -72,7 +72,7 @@ namespace MP3TagExtractor
                     foreach (var file in dirFiles)
                     {
                         Console.WriteLine($"Processing file: {file}");
-                        ProcessFile(file, csvBuilder);
+                        ProcessFile(file, csvBuilder, debug);
                     }
                 }
             }
@@ -81,47 +81,7 @@ namespace MP3TagExtractor
                 // Process each .mp3 file. files contains all .mp3 files. file will be each individual .mp3 file
                 foreach (var file in files)
                 {
-                    ProcessFile(file, csvBuilder);
-                }
-            }
-
-            // Process each .mp3 file. files contains all .mp3 files. file will be each individual .mp3 file
-            foreach (var file in files)
-            {
-                // Debug message if user enabled --debug switch
-                if (debug)
-                {
-                    Console.WriteLine($"Processing file: {file}");
-                }
-                ProcessFile(file, csvBuilder);
-            }
-
-            foreach (var file in files)
-            {
-                // Debug message if user enabled --debug switch
-                if (debug)
-                {
-                    Console.WriteLine($"Processing file: {file}");
-                }
-
-                try
-                {
-                    using (var mp3 = TagLib.File.Create(file))
-                    {
-                        // Obtain file size, convert to megabytes
-                        var mp3FileSizeMB = new FileInfo(file).Length / (1024.0 * 1024.0); 
-                        csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{mp3FileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\",\"{file}\"");
-                    }
-                }
-                catch (TagLib.CorruptFileException e)
-                {
-                    // Skip files that are corrupt or have incorrectly formatted metadata
-                    Console.WriteLine($"Warning: Skipping corrupt or unsupported file: {file}. Exception: {e}");
-                }
-                catch (Exception e)
-                {
-                    // Output error message if failed to process .mp3 file
-                    Console.WriteLine($"Error processing file: {file}. Exception: {e}");
+                    ProcessFile(file, csvBuilder, debug);
                 }
             }
 
@@ -151,8 +111,15 @@ namespace MP3TagExtractor
         }
 
         // Method for processing individual file
-        private static void ProcessFile(string file, StringBuilder csvBuilder)
+        // Method for processing individual file
+        private static void ProcessFile(string file, StringBuilder csvBuilder, bool debug)
         {
+            // Debug message if user enabled --debug switch
+            if (debug)
+            {
+                Console.WriteLine($"Processing file: {file}");
+            }
+
             try
             {
                 using (var mp3 = TagLib.File.Create(file))
