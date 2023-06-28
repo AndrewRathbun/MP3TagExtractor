@@ -52,7 +52,7 @@ namespace MP3TagExtractor
                     using (var mp3 = TagLib.File.Create(file))
                     {
                         var fileSizeMB = new FileInfo(file).Length / (1024.0 * 1024.0); // convert bytes to megabytes
-                        csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title}\",\"{mp3.Properties.Duration}\",\"{mp3.Tag.Comment}\",\"{mp3.Tag.FirstGenre}\",\"{fileSizeMB:F2}\",\"{mp3.Properties.AudioBitrate}\"");
+                        csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{fileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\"");
                     }
                 }
                 catch (Exception e)
