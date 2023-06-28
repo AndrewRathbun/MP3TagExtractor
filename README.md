@@ -13,7 +13,7 @@
 
 The above command will provide console messaging similar to below, as of v0.1:
 
-```powershell  
+```
 PS C:\temp> .\MP3TagExtractor.exe -d 'K:\Music\Megadeth' -r
 Located 36 folders and 462 .mp3 files in the specified path.
 CSV file created successfully at K:\Music\Megadeth\Megadeth_20230626_095321.csv with 463 rows. File size: 50824 bytes.  
@@ -27,7 +27,7 @@ This output will be refined over time, as needed.
 
 Adding `--debug` to your command will show which folders and files are being processed as they're being processed:
 
-```powershell
+```
 PS Z:\MP3TagExtractor> .\MP3TagExtractor.exe -d 'K:\Music\Megadeth' -r --debug
 Located 36 folders and 462 .mp3 files in the specified path.
 Processing directory: K:\Music\Megadeth\1985 - Killing Is My Business... And Business Is Good!
