@@ -86,10 +86,10 @@ namespace MP3TagExtractor
             }
 
             // Generate CSV file name based on parent directory name and current timestamp
-            string parentFolderName = new DirectoryInfo(dirPath).Name.Replace(" ", "");
-            string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string outputFileName = $"{parentFolderName}_{timeStamp}.csv";
-            string outputPath = Path.Combine(dirPath, outputFileName);
+            string parentFolderName = new DirectoryInfo(dirPath).Name.Replace(" ", ""); // remove spaces from folder name, example: Blind Guardian -> BlindGuardian
+            string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss"); // generate timestamp, example: 20230627_231122
+            string outputFileName = $"{parentFolderName}_{timeStamp}.csv"; // example: BandName_20230627_231122.csv
+            string outputPath = Path.Combine(dirPath, outputFileName); // example: K:\Music\Music_20230627_231122.csv or K:\Music\Blind Guardian\BlindGuardian_20230627_231122.csv
 
             // Write CSV file content to file
             System.IO.File.WriteAllText(outputPath, csvBuilder.ToString());
