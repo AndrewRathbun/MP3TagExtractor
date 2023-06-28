@@ -5,7 +5,8 @@
  ## Usage
  
 * `-d` - This switch is required. Please provide a directory where you want this tool to scan for MP3 files. Please note, if you're ONLY using this switch, it'll ONLY look for files in this directory, and not recursively.
-* `-r` - This switch is optional. If you add `-r` to the end of your command, it'll recurse the specified directory you provided for `-d` for MP3 files residing in subfolders. 
+* `-r` - This switch is optional. If you add `-r` to the end of your command, it'll recurse the specified directory you provided for `-d` for MP3 files residing in subfolders.
+* `--debug` - This switch is optional. This will allow for more verbosity in the console logging, which will show you which directory and file(s) are being processed as they're being processed by the application.
 
 ## Example Commands
 
