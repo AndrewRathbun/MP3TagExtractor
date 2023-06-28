@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -43,7 +44,9 @@ namespace MP3TagExtractor
             Console.WriteLine($"Located {dirCount} folders and {fileCount} .mp3 files in the specified path.");
 
             var csvBuilder = new StringBuilder();
-            csvBuilder.AppendLine("Artist,Year,Album,Disc,Title,Duration,Comment,Genre,FileSize(MB),Bitrate(kbps)");
+            csvBuilder.AppendLine("Artist,Year,Album,Disc,Title,Duration,Comment,Genre,FileSize(MB),Bitrate(kbps),FilePath");
+
+            Stopwatch stopwatch = Stopwatch.StartNew(); //starts measuring time
 
             foreach (var file in files)
             {
@@ -52,7 +55,7 @@ namespace MP3TagExtractor
                     using (var mp3 = TagLib.File.Create(file))
                     {
                         var fileSizeMB = new FileInfo(file).Length / (1024.0 * 1024.0); // convert bytes to megabytes
-                        csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{fileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\"");
+                        csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{fileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\",\"{file}\"");
                     }
                 }
                 catch (Exception e)
@@ -74,6 +77,9 @@ namespace MP3TagExtractor
             long fileSize = new FileInfo(outputPath).Length;
             int rowCount = csvBuilder.ToString().Split(Environment.NewLine).Length - 1; // Subtract 1 for header
             Console.WriteLine($"CSV file created successfully at {outputPath} with {rowCount} rows. File size: {fileSize} bytes.");
+
+            stopwatch.Stop(); // stops measuring time
+            Console.WriteLine($"Time elapsed: {stopwatch.Elapsed}");
         }
     }
 }
