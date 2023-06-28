@@ -113,6 +113,11 @@ namespace MP3TagExtractor
                         csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{mp3FileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\",\"{file}\"");
                     }
                 }
+                catch (TagLib.CorruptFileException e)
+                {
+                    // Skip files that are corrupt or have incorrectly formatted metadata
+                    Console.WriteLine($"Warning: Skipping corrupt or unsupported file: {file}. Exception: {e}");
+                }
                 catch (Exception e)
                 {
                     // Output error message if failed to process .mp3 file
