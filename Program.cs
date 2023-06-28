@@ -43,7 +43,7 @@ namespace MP3TagExtractor
             Console.WriteLine($"Located {dirCount} folders and {fileCount} .mp3 files in the specified path.");
 
             var csvBuilder = new StringBuilder();
-            csvBuilder.AppendLine("Artist,Year,Album,Disc,Title,Duration,Comment,Genre");
+            csvBuilder.AppendLine("Artist,Year,Album,Disc,Title,Duration,Comment,Genre,FileSize(MB),Bitrate(kbps)");
 
             foreach (var file in files)
             {
@@ -51,7 +51,8 @@ namespace MP3TagExtractor
                 {
                     using (var mp3 = TagLib.File.Create(file))
                     {
-                        csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title}\",\"{mp3.Properties.Duration}\",\"{mp3.Tag.Comment}\",\"{mp3.Tag.FirstGenre}\"");
+                        var fileSizeMB = new FileInfo(file).Length / (1024.0 * 1024.0); // convert bytes to megabytes
+                        csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title}\",\"{mp3.Properties.Duration}\",\"{mp3.Tag.Comment}\",\"{mp3.Tag.FirstGenre}\",\"{fileSizeMB:F2}\",\"{mp3.Properties.AudioBitrate}\"");
                     }
                 }
                 catch (Exception e)
