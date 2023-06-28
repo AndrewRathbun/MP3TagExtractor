@@ -74,9 +74,14 @@ namespace MP3TagExtractor
             System.IO.File.WriteAllText(outputPath, csvBuilder.ToString());
 
             // Output file details
-            long fileSize = new FileInfo(outputPath).Length;
+            FileInfo outputFile = new FileInfo(outputPath);
+            long fileSizeBytes = outputFile.Length;
+            double fileSizeKB = fileSizeBytes / 1024.0; // KB
+            double fileSizeMB = fileSizeKB / 1024.0; // MB
+
             int rowCount = csvBuilder.ToString().Split(Environment.NewLine).Length - 1; // Subtract 1 for header
-            Console.WriteLine($"CSV file created successfully at {outputPath} with {rowCount} rows. File size: {fileSize} bytes.");
+            Console.WriteLine($"CSV file created successfully at {outputPath} with {rowCount} rows | File size: {fileSizeBytes} bytes, {fileSizeKB:F2} KB, {fileSizeMB:F2} MB.");
+
 
             stopwatch.Stop(); // stops measuring time
             Console.WriteLine($"Time elapsed: {stopwatch.Elapsed}");
