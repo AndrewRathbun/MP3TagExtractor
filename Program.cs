@@ -1,9 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
-using TagLib;
 
 namespace MP3TagExtractor
 {
@@ -48,14 +44,16 @@ namespace MP3TagExtractor
             // Count number of directories and .mp3 files in the specified path
             int dirCount = Directory.GetDirectories(dirPath, "*", searchOption).Length; // count of subdirectories
             var directories = Directory.GetDirectories(dirPath, "*", searchOption); // get list of directories
-            var files = System.IO.Directory.EnumerateFiles(dirPath, "*.mp3", searchOption).ToList(); // gather list of .mp3 files
+            var files = Directory.EnumerateFiles(dirPath, "*.mp3", searchOption)
+                .ToList(); // gather list of .mp3 files
             int fileCount = files.Count; // count of files
 
             Console.WriteLine($"Located {dirCount} folders and {fileCount} .mp3 files in the specified path.");
 
             // Prepare CSV file content
             var csvBuilder = new StringBuilder();
-            csvBuilder.AppendLine("Artist,Year,Album,Disc,Title,Duration,Comment,Genre,FileSize(MB),Bitrate(kbps),FilePath");
+            csvBuilder.AppendLine(
+                "Artist,Year,Album,Disc,Title,Duration,Comment,Genre,FileSize(MB),Bitrate(kbps),FilePath");
 
             // Starts measuring time
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -86,13 +84,18 @@ namespace MP3TagExtractor
             }
 
             // Generate CSV file name based on parent directory name and current timestamp
-            string parentFolderName = new DirectoryInfo(dirPath).Name.Replace(" ", ""); // remove spaces from folder name, example: Blind Guardian -> BlindGuardian
+            string parentFolderName =
+                new DirectoryInfo(dirPath).Name
+                    .Replace(" ", ""); // remove spaces from folder name, example: Blind Guardian -> BlindGuardian
             string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss"); // generate timestamp, example: 20230627_231122
             string outputFileName = $"{parentFolderName}_{timeStamp}.csv"; // example: BandName_20230627_231122.csv
-            string outputPath = Path.Combine(dirPath, outputFileName); // example: K:\Music\Music_20230627_231122.csv or K:\Music\Blind Guardian\BlindGuardian_20230627_231122.csv
+            string
+                outputPath =
+                    Path.Combine(dirPath,
+                        outputFileName); // example: K:\Music\Music_20230627_231122.csv or K:\Music\Blind Guardian\BlindGuardian_20230627_231122.csv
 
             // Write CSV file content to file
-            System.IO.File.WriteAllText(outputPath, csvBuilder.ToString());
+            File.WriteAllText(outputPath, csvBuilder.ToString());
 
             // Calculate outputFile file size in bytes, KB, and MB
             FileInfo outputFile = new FileInfo(outputPath);
@@ -102,12 +105,12 @@ namespace MP3TagExtractor
 
             // Subtract 1 line for header
             int rowCount = csvBuilder.ToString().Split(Environment.NewLine).Length - 1; // Subtract 1 for header
-            Console.WriteLine($"CSV file created successfully at {outputPath} with {rowCount} rows | File size: {fileSizeBytes} bytes | {fileSizeKB:F2} KB | {fileSizeMB:F2} MB."); //
-            
+            Console.WriteLine(
+                $"CSV file created successfully at {outputPath} with {rowCount} rows | File size: {fileSizeBytes} bytes | {fileSizeKB:F2} KB | {fileSizeMB:F2} MB."); //
+
             // Stops measuring time
             stopwatch.Stop();
             Console.WriteLine($"Time elapsed: {stopwatch.Elapsed}");
-
         }
 
         // Method for processing individual file
@@ -126,7 +129,8 @@ namespace MP3TagExtractor
                 {
                     // Obtain file size, convert to megabytes
                     var mp3FileSizeMB = new FileInfo(file).Length / (1024.0 * 1024.0);
-                    csvBuilder.AppendLine($"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{mp3FileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\",\"{file}\"");
+                    csvBuilder.AppendLine(
+                        $"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{mp3FileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\",\"{file}\"");
                 }
             }
             catch (Exception e)
