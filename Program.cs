@@ -100,13 +100,13 @@ namespace MP3TagExtractor
             // Calculate outputFile file size in bytes, KB, and MB
             FileInfo outputFile = new FileInfo(outputPath);
             long fileSizeBytes = outputFile.Length;
-            double fileSizeKB = fileSizeBytes / 1024.0; // KB
-            double fileSizeMB = fileSizeKB / 1024.0; // MB
+            double fileSizeKb = fileSizeBytes / 1024.0; // KB
+            double fileSizeMb = fileSizeKb / 1024.0; // MB
 
             // Subtract 1 line for header
             int rowCount = csvBuilder.ToString().Split(Environment.NewLine).Length - 1; // Subtract 1 for header
             Console.WriteLine(
-                $"CSV file created successfully at {outputPath} with {rowCount} rows | File size: {fileSizeBytes} bytes | {fileSizeKB:F2} KB | {fileSizeMB:F2} MB."); //
+                $"CSV file created successfully at {outputPath} with {rowCount} rows | File size: {fileSizeBytes} bytes | {fileSizeKb:F2} KB | {fileSizeMb:F2} MB."); //
 
             // Stops measuring time
             stopwatch.Stop();
@@ -128,9 +128,9 @@ namespace MP3TagExtractor
                 using (var mp3 = TagLib.File.Create(file))
                 {
                     // Obtain file size, convert to megabytes
-                    var mp3FileSizeMB = new FileInfo(file).Length / (1024.0 * 1024.0);
+                    var mp3FileSizeMb = new FileInfo(file).Length / (1024.0 * 1024.0);
                     csvBuilder.AppendLine(
-                        $"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{mp3FileSizeMB:F2}\",\"{mp3.Properties?.AudioBitrate}\",\"{file}\"");
+                        $"\"{mp3.Tag.FirstPerformer ?? ""}\",\"{mp3.Tag.Year}\",\"{mp3.Tag.Album ?? ""}\",\"{mp3.Tag.Disc}\",\"{mp3.Tag.Title ?? ""}\",\"{mp3.Properties?.Duration}\",\"{mp3.Tag.Comment ?? ""}\",\"{mp3.Tag.FirstGenre ?? ""}\",\"{mp3FileSizeMb:F2}\",\"{mp3.Properties?.AudioBitrate}\",\"{file}\"");
                 }
             }
             catch (Exception e)
